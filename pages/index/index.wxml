@@ -1,0 +1,26 @@
+<view class="wrap">
+    <view class="left">
+        <view class="nav clearfix">
+
+            <view class="nav-ls {{item.check?'nav-ls-cur':''}} fr" wx:for="{{nav}}" id="{{index}}" bindtap="chooseNav">
+                    <view class="nav-ls-txt">{{item.title}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="middle">
+        <canvas canvas-id="myCanvas" class="canvas"
+            disable-scroll="false"
+            bindtouchstart="touchStart"
+            bindtouchmove="touchMove"
+            bindtouchend="touchEnd">
+        </canvas>
+        <!-- <input type="color"> -->
+    </view>
+    <view class="right" >
+        <view class="clear" bindtap="clear">清除</view>
+        
+    </view>
+</view>
+
+
+
