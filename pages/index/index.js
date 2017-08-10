@@ -14,7 +14,13 @@ Page({
     },{
       title:'形状',
       check:true
-    }]
+    }],
+    canInfo:{
+      top:'0',
+      left:'0',
+      width:'100',
+      height:'100'
+    }
   },
   chooseNav(e){
     var index=e.currentTarget.id;
@@ -37,25 +43,38 @@ Page({
   },
   touchStart: function (e) {
     this.start = e.changedTouches[0];
+
   },
   touchMove: function (e) {
     var end = e.changedTouches[0];
-    var p = wx.createCanvasContext('myCanvas');
-    p.setLineCap('round')
-    p.moveTo(this.start.x, this.start.y);
-    p.lineTo(end.x,end.y)
-    p.stroke();
-    p.draw(true);
-    this.start=end;
+    // var p = wx.createCanvasContext('myCanvas');
+    // p.setLineCap('round')
+    // p.moveTo(this.start.x, this.start.y);
+    // p.lineTo(end.x,end.y)
+    // p.stroke();
+    // p.draw(true);
+    // this.start=end; 
+
+
+    this.data.canInfo.top=this.start.y;
+    this.data.canInfo.left=this.start.x;
+    this.data.canInfo.width=end.x-this.start.x;
+    this.data.canInfo.height=end.y-this.start.y;
+    
+    this.setData({
+      canInfo:this.data.canInfo
+    })
     // this.data.canvasConf.color='blue';
     // p.setFillStyle(this.data.canvasConf.color);
     // p.fillRect(this.start.x, this.start.y, end.x - this.start.x, end.y - this.start.y);
     // p.draw()
   },
   touchEnd: function (e) {
-    // var end = e.changedTouches[0];
-    // var p = wx.createCanvasContext('myCanvas');
+    var end = e.changedTouches[0];
+    var p = wx.createCanvasContext('myCanvas');
     
+    p.fillRect(this.start.x,this.start.y,this.data.canInfo.width,this.data.canInfo.height)
+    p.draw(true);
     // p.save();
     // this.data.canvasConf.color='blue';
     // p.setFillStyle(this.data.canvasConf.color);

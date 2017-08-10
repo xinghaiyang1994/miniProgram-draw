@@ -8,12 +8,15 @@
         </view>
     </view>
     <view class="middle">
-        <canvas canvas-id="myCanvas" class="canvas"
-            disable-scroll="false"
-            bindtouchstart="touchStart"
-            bindtouchmove="touchMove"
-            bindtouchend="touchEnd">
-        </canvas>
+        <view class="canvas-wrap">
+            <canvas canvas-id="myCanvas" class="canvas"
+                disable-scroll="false"
+                bindtouchstart="touchStart"
+                bindtouchmove="touchMove"
+                bindtouchend="touchEnd">
+            </canvas>
+            <view class="can-rect" style="top:{{canInfo.top}}px;left:{{canInfo.left}}px;width:{{canInfo.width}}px;height:{{canInfo.height}}px;"></view>
+        </view>
         <!-- <input type="color"> -->
     </view>
     <view class="right" >
