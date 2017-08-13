@@ -9,11 +9,20 @@ Page({
       color:'blue'
     },
     nav:[{
-      title:'形状',
+      title:'画笔',
+      check:true
+    },{
+      title:'直线',
       check:false
     },{
-      title:'形状',
-      check:true
+      title:'矩形',
+      check:false
+    },{
+      title:'橡皮',
+      check:false
+    },{
+      title:'颜色',
+      check:false
     }],
     canInfo:{
       top:'0',
