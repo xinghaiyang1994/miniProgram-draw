@@ -1,9 +1,8 @@
 <view class="wrap">
     <view class="left">
         <view class="nav clearfix">
-
-            <view class="nav-ls {{item.check?'nav-ls-cur':''}} fr" wx:for="{{nav}}" id="{{index}}" bindtap="chooseNav">
-                    <view class="nav-ls-txt">{{item.title}}</view>
+            <view class="nav-ls {{item.check?'nav-ls-cur':''}} fr" wx:for="{{nav}}" wx:key="{{index}}" data-id="{{index}}" bindtap="chooseNav">
+                <view class="nav-ls-txt">{{item.title}}</view>
             </view>
         </view>
     </view>
@@ -20,6 +19,13 @@
         <!-- <input type="color"> -->
     </view>
     <view class="right" >
+        <view wx:if="{{nav[0].check}} || {{nav[1].check}} || {{nav[3].check}}" class="clearfix pen">
+            <button class="fr" type="primary" bindtap="addWidth">+</button> 
+            <view class="fr pen-num-wrap">
+                <view class="pen-num">{{config.width}}</view>    
+            </view>   
+            <button class="fr" type="primary" bindtap="reduWidth">|</button>    
+        </view>            
         <view class="clear" bindtap="clear">清除</view>
         
     </view>

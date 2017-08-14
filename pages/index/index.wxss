@@ -97,3 +97,22 @@ page,
   line-height: 60rpx;
   transform: rotateZ(90deg);
 }
+
+.pen{
+  margin-right: 200rpx;
+  margin-top: 20rpx;
+}
+.pen-num-wrap{
+  width: 92rpx;
+  height: 92rpx;
+  text-align: center;
+  line-height: 92rpx;
+}
+.pen-num{
+  transform: rotateZ(90deg);
+}
+
+
+
+
+
