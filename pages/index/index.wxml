@@ -14,19 +14,22 @@
                 bindtouchmove="touchMove"
                 bindtouchend="touchEnd">
             </canvas>
-            <view class="can-rect" style="top:{{canInfo.top}}px;left:{{canInfo.left}}px;width:{{canInfo.width}}px;height:{{canInfo.height}}px;"></view>
+            <view class="can-rect" wx:if="{{canInfo.isShow}}" style="top:{{canInfo.top}}px;left:{{canInfo.left}}px;width:{{canInfo.width}}px;height:{{canInfo.height}}px;"></view>
         </view>
         <!-- <input type="color"> -->
     </view>
     <view class="right" >
-        <view wx:if="{{nav[0].check}} || {{nav[1].check}} || {{nav[3].check}}" class="clearfix pen">
+        <view wx:if="{{nav[0].check || nav[1].check || nav[3].check}}" class="clearfix pen">
             <button class="fr" type="primary" bindtap="addWidth">+</button> 
             <view class="fr pen-num-wrap">
                 <view class="pen-num">{{config.width}}</view>    
             </view>   
             <button class="fr" type="primary" bindtap="reduWidth">|</button>    
-        </view>            
-        <view class="clear" bindtap="clear">清除</view>
+        </view> 
+        <view wx:elif="{{nav[4].check}}" class="color clearfix">
+            <view class="color-ls fr {{item.check?'color-ls-cur':''}}" wx:key="{{index}}" data-id="{{item.id}}" wx:for="{{color}}" bindtap="chooseColor" style="background:{{item.value}}"></view>
+        </view>           
+        <button type="primary" class="clear" bindtap="clear">清除</button>
         
     </view>
 </view>

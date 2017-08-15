@@ -6,8 +6,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     config:{
-      type:'line',
-      color:'blue',
+      type:'rect',
+      color:'black',
       width:5
     },
     nav:[{
@@ -19,12 +19,12 @@ Page({
       id:1,
       title:'直线',
       type:'line',
-      check:true
+      check:false
     },{
       id:2,
       title:'矩形',
       type:'rect',
-      check:false
+      check:true
     },{
       id:3,
       title:'橡皮',
@@ -37,11 +37,37 @@ Page({
       check:false
     }],
     canInfo:{
+      isShow:false,
       top:'0',
       left:'0',
-      width:'100',
-      height:'100'
-    }
+      width:'0',
+      height:'0'
+    },
+    color:[{
+      id:0,
+      value:'black',
+      check:true
+    },{
+      id:1,
+      value:'red',
+      check:false
+    },{
+      id:2,
+      value:'blue',
+      check:false
+    },{
+      id:3,
+      value:'yellow',
+      check:false
+    },{
+      id:4,
+      value:'green',
+      check:false
+    },{
+      id:5,
+      value:'aqua',
+      check:false
+    }]
   },
   chooseNav(e){
  
@@ -49,9 +75,11 @@ Page({
     var config=this.data.config;
 
     this.data.nav.forEach(function(el,i) {
-      if(i == index){
+      if(el.id == index){
         el.check=true;
-        config.type=el.type;
+        if(el.type != 'color'){
+          config.type=el.type;
+        }
       }else{
         el.check=false;
       }
@@ -63,62 +91,79 @@ Page({
 
   },
   touchStart: function (e) {
+
+    var config=this.data.config;
+    var canInfo=this.data.canInfo;
     this.data.start = e.changedTouches[0];
+    
+    if(config.type == 'rect'){   
+      canInfo.isShow=true;
+      this.setData({
+        canInfo
+      });
+    }
 
   },
   touchMove: function (e) {
+
     var config=this.data.config;
     var p = wx.createCanvasContext('myCanvas');
     var end = e.changedTouches[0];
+    var canInfo=this.data.canInfo;
+    var start=this.data.start;
 
     if(config.type=='pen' || config.type=='eraser'){
 
       if(config.type=='eraser'){
         config.color='#ffffff';
       }
-      p.moveTo(this.data.start.x, this.data.start.y);
+      p.moveTo(start.x, start.y);
       p.lineTo(end.x,end.y);
       p.setStrokeStyle(config.color);
       p.setLineCap('round');
       p.setLineWidth(config.width);
       p.stroke();
       p.draw(true);
-      this.data.start=end; 
+      start=end; 
+
+      this.setData({
+        canInfo,
+        start
+      });
 
     }else if(config.type=='line'){
-      console.log(1)
-    }else if(false){
-      var end = e.changedTouches[0];
-      // var p = wx.createCanvasContext('myCanvas');
-      // p.setLineCap('round')
-      // p.moveTo(this.start.x, this.start.y);
-      // p.lineTo(end.x,end.y)
-      // p.stroke();
-      // p.draw(true);
-      // this.start=end; 
-  
-  
-      this.data.canInfo.top=this.start.y;
-      this.data.canInfo.left=this.start.x;
-      this.data.canInfo.width=end.x-this.start.x;
-      this.data.canInfo.height=end.y-this.start.y;
+      console.log('line')
+    }else if(config.type=='rect'){
+      
+      canInfo.width=Math.abs(end.x-start.x);
+      canInfo.height=Math.abs(end.y-start.y);
 
+      if(end.x > start.x){
+        canInfo.left=start.x;
+      }else{ 
+        canInfo.left=start.x - canInfo.width;
+      }
+
+      if(end.y > start.y){
+        canInfo.top=start.y;
+      }else{
+        canInfo.top=start.y - canInfo.height;
+      }
+
+      this.setData({
+        canInfo
+      });
     }else{
 
     }
     
-    this.setData({
-      canInfo:this.data.canInfo
-    })
-    // this.data.config.color='blue';
-    // p.setFillStyle(this.data.config.color);
-    // p.fillRect(this.start.x, this.start.y, end.x - this.start.x, end.y - this.start.y);
-    // p.draw()
+    
+  
   },
   touchEnd: function (e) {
     var config=this.data.config;
     var p = wx.createCanvasContext('myCanvas');
-    var end = e.changedTouches[0];
+    var end = e.changedTouches[0];  
 
     if(config.type=='pen'){
 
@@ -127,19 +172,22 @@ Page({
       p.moveTo(this.data.start.x,this.data.start.y);
       p.lineTo(end.x,end.y);
       p.setLineWidth(config.width);
+      p.setStrokeStyle(config.color);
       p.stroke();
       p.draw(true);
 
-    }else if(false){
-      var end = e.changedTouches[0];
-      
-      p.fillRect(this.start.x,this.start.y,this.data.canInfo.width,this.data.canInfo.height)
+    }else if(config.type=='rect'){
+
+      var canInfo=this.data.canInfo;
+      var start=this.data.start;
+
+      p.fillRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height)
       p.draw(true);
-      // p.save();
-      // this.data.config.color='blue';
-      // p.setFillStyle(this.data.config.color);
-      // p.fillRect(this.start.x, this.start.y, end.x - this.start.x, end.y - this.start.y);
-      // p.draw(true)
+      canInfo.isShow=false;
+    
+      this.setData({
+        canInfo
+      });
 
     }else{
 
@@ -182,6 +230,25 @@ Page({
         duration: 2000
       });
     }
+  },
+  chooseColor(e){
+    var id=e.currentTarget.dataset.id;
+    var color=this.data.color;
+    var config=this.data.config;
+
+    color.forEach((el)=>{
+      if(el.id == id){
+        el.check=true;
+        config.color=el.value;
+      }else{
+        el.check=false;
+      }
+    });
+    console.log(config.color)
+    this.setData({
+      color,
+      config
+    });
   },
   onLoad: function () {
     
