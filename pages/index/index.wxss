@@ -33,6 +33,7 @@ page,
 .canvas {
   width: 100%;
   height: 830rpx;
+  background: #fff;
 }
 .can-rect{
   position: absolute;
@@ -133,5 +134,18 @@ page,
   transform: rotateZ(90deg);
 }
 
+.rect{
+  margin-top: 40rpx;
+}
 
-
+.save{
+  position: absolute;
+  top: 40rpx;
+  left: 0;
+  transform: rotateZ(90deg);
+}
+.img{
+  position: absolute;
+  top: 200rpx;
+  left: 0;
+}

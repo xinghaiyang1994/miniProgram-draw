@@ -3,6 +3,7 @@
 var app = getApp()
 Page({
   data: {
+    url:'https://www.baidu.com/img/bd_logo1.png',
     motto: 'Hello World',
     userInfo: {},
     config:{
@@ -180,7 +181,7 @@ Page({
 
       var canInfo=this.data.canInfo;
       var start=this.data.start;
-
+      p.setFillStyle(config.color);
       p.fillRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height)
       p.draw(true);
       canInfo.isShow=false;
@@ -195,9 +196,10 @@ Page({
   },
   clear(){
     var p = wx.createCanvasContext('myCanvas');
-    console.log(p)
-    p.clearRect(0,0,900,908);
-    p.draw()
+
+    p.setFillStyle('white');
+    p.fillRect(0,0,900,908);
+    p.draw(true)
   },
   addWidth(){
     var config=this.data.config;
@@ -250,10 +252,51 @@ Page({
       config
     });
   },
+  saveImg(){
+    
+    wx.showModal({
+      title: '下载图片',
+      content: '是否需要保存所绘图片?',
+      success: function(res) {
+        if (res.confirm) {
+          
+          wx.canvasToTempFilePath({
+            x: 0,
+            y: 0,
+            canvasId: 'myCanvas',
+            success: function(res) {
+            
+              wx.saveFile({
+                tempFilePath: res.tempFilePath,
+                success: function(res) {
+                  var savedFilePath = res.savedFilePath;
+                  
+                  wx.saveImageToPhotosAlbum({
+                    filePath:savedFilePath,
+                    success(){
+                      console.log('ok')
+                    }
+                  });
+      
+                }
+              });
+      
+            } 
+          });
+
+        }
+      }
+    })
+
+
+  
+  
+   
+  },
   onLoad: function () {
     
   },
   onReady: function (e) {
-
+    this.clear();
   }
 })
