@@ -28,7 +28,7 @@ page,
   box-sizing: border-box;
   border: 2rpx solid #000;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .canvas {
   width: 100%;
@@ -37,8 +37,12 @@ page,
 }
 .can-rect{
   position: absolute;
-  border: 1rpx solid red;
-  top: 0;
+  z-index: 1;
+  border: 1px solid red;
+  background: red;
+  width: 100px;
+  height: 100px;
+  top: -100px;
   left: 0;
 }
 
@@ -149,3 +153,28 @@ page,
   top: 200rpx;
   left: 0;
 }
+.rect-ls{
+  width: 50rpx;
+  height: 50rpx;
+  border: 10rpx solid aqua;
+  box-sizing: content-box;
+  position: relative;
+  margin-right: 50rpx;
+}
+.rect-ls:first-child{
+  margin-right: 250rpx;
+  background: aqua;
+}
+.rect-ls-cur::before{
+  content: '';
+  display: block;
+  position: absolute;
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  margin-left: -10rpx;
+  background: red;
+  top: 70rpx;
+  left: 50%;
+}
+

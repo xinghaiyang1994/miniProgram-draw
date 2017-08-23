@@ -33,7 +33,7 @@
             <view class="color-ls fr {{item.check?'color-ls-cur':''}}" wx:key="{{index}}" data-id="{{item.id}}" wx:for="{{color}}" bindtap="chooseColor" style="background:{{item.value}}"></view>
         </view>    
         <view wx:elif="{{nav[2].check}}" class="rect clearfix">
-            1231    
+            <view class="fr rect-ls {{item.check?'rect-ls-cur':''}}" wx:for="{{rect}}" wx:key="{{index}}" data-id="{{item.id}}" bindtap="chooseRect"></view>
         </view>    
         <button type="primary" class="clear" bindtap="clear">清除</button>
         

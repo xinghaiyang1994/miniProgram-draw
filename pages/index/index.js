@@ -7,7 +7,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     config:{
-      type:'rect',
+      type:'line',
+      rectType:'fillRect',
       color:'black',
       width:5
     },
@@ -67,6 +68,15 @@ Page({
     },{
       id:5,
       value:'aqua',
+      check:false
+    }],
+    rect:[{
+      id:0,
+      type:'fillRect',
+      check:true
+    },{
+      id:1,
+      type:'strokeRect',
       check:false
     }]
   },
@@ -181,8 +191,15 @@ Page({
 
       var canInfo=this.data.canInfo;
       var start=this.data.start;
-      p.setFillStyle(config.color);
-      p.fillRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height)
+      
+      if(config.rectType == 'fillRect'){
+        p.setFillStyle(config.color);
+        p.fillRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height);
+      }else{
+        p.setStrokeStyle(config.color);
+        p.strokeRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height)
+      }
+     
       p.draw(true);
       canInfo.isShow=false;
     
@@ -293,10 +310,31 @@ Page({
   
    
   },
+  chooseRect(e){
+    var id=e.currentTarget.dataset.id;
+    var rect=this.data.rect;
+    var config=this.data.config;
+
+    rect.forEach(function(el,i){
+      if(el.id == id){
+        el.check=true;
+        config.rectType=el.type;
+      }else{
+        el.check=false;
+      }
+    });
+
+    this.setData({
+      rect,
+      config
+    });
+
+  },
   onLoad: function () {
     
   },
   onReady: function (e) {
     this.clear();
+    
   }
 })
