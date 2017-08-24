@@ -7,7 +7,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     config:{
-      type:'line',
+      type:'pen',
+      isClear:false,
       rectType:'fillRect',
       color:'black',
       width:5
@@ -16,7 +17,7 @@ Page({
       id:0,
       title:'画笔',
       type:'pen',
-      check:false
+      check:true
     },{
       id:1,
       title:'直线',
@@ -26,7 +27,7 @@ Page({
       id:2,
       title:'矩形',
       type:'rect',
-      check:true
+      check:false
     },{
       id:3,
       title:'橡皮',
@@ -88,13 +89,19 @@ Page({
     this.data.nav.forEach(function(el,i) {
       if(el.id == index){
         el.check=true;
-        if(el.type != 'color'){
+        if(el.type != 'color' && el.type != 'eraser'){
           config.type=el.type;
+          config.isClear=false;  
+        }else if(el.type == 'eraser'){   
+          config.isClear=true;
+        }else{
+          config.isClear=false;
         }
       }else{
         el.check=false;
       }
     });
+    
     this.setData({
       nav:this.data.nav,
       config
@@ -106,8 +113,9 @@ Page({
     var config=this.data.config;
     var canInfo=this.data.canInfo;
     this.data.start = e.changedTouches[0];
-    
-    if(config.type == 'rect'){   
+    if(config.isClear){
+
+    }else if(config.type == 'rect'){   
       canInfo.isShow=true;
       this.setData({
         canInfo
@@ -123,14 +131,10 @@ Page({
     var canInfo=this.data.canInfo;
     var start=this.data.start;
 
-    if(config.type=='pen' || config.type=='eraser'){
-
-      if(config.type=='eraser'){
-        config.color='#ffffff';
-      }
+    if(config.isClear){
       p.moveTo(start.x, start.y);
       p.lineTo(end.x,end.y);
-      p.setStrokeStyle(config.color);
+      p.setStrokeStyle('#ffffff');
       p.setLineCap('round');
       p.setLineWidth(config.width);
       p.stroke();
@@ -142,8 +146,22 @@ Page({
         start
       });
 
-    }else if(config.type=='line'){
-      console.log('line')
+    }else if(config.type=='pen'){
+      
+      p.moveTo(start.x, start.y);
+      p.lineTo(end.x,end.y);
+      p.setStrokeStyle(config.color); 
+      p.setLineCap('round');
+      p.setLineWidth(config.width);
+      p.stroke();
+      p.draw(true);
+      start=end; 
+
+      this.setData({
+        canInfo,
+        start
+      });
+
     }else if(config.type=='rect'){
       
       canInfo.width=Math.abs(end.x-start.x);
@@ -176,7 +194,9 @@ Page({
     var p = wx.createCanvasContext('myCanvas');
     var end = e.changedTouches[0];  
 
-    if(config.type=='pen'){
+    if(config.isClear){
+
+    }else if(config.type=='pen'){
 
     }else if(config.type=='line'){
 
@@ -193,9 +213,11 @@ Page({
       var start=this.data.start;
       
       if(config.rectType == 'fillRect'){
+        p.setLineWidth(1);
         p.setFillStyle(config.color);
         p.fillRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height);
       }else{
+        p.setLineWidth(config.width);
         p.setStrokeStyle(config.color);
         p.strokeRect(canInfo.left,canInfo.top,canInfo.width,canInfo.height)
       }
@@ -263,7 +285,7 @@ Page({
         el.check=false;
       }
     });
-    console.log(config.color)
+   
     this.setData({
       color,
       config
